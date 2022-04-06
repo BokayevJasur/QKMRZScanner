@@ -28,7 +28,7 @@ class QKCutoutView: UIView {
         super.layoutSubviews()
 
         // Orientation or the view's size could change
-        recalculateCutoutRect()
+        calculateCutoutRect()
         addBorderAroundCutout()
     }
     
@@ -90,7 +90,7 @@ class QKCutoutView: UIView {
         layer.addSublayer(borderLayer)
     }
     
-    fileprivate func calculateCutoutRect() -> CGRect {
+    fileprivate func calculateCutoutRect() {
         let documentFrameRatio = CGFloat(1.42) // Passport's size (ISO/IEC 7810 ID-3) is 125mm × 88mm
         var (width, height): (CGFloat, CGFloat)
         
@@ -110,7 +110,8 @@ class QKCutoutView: UIView {
         let topOffset = (bounds.height - height) / 2
         let leftOffset = (bounds.width - width) / 2
         
-        return CGRect(x: leftOffset, y: topOffset, width: width, height: height)
+        cutoutRect = CGRect(x: leftOffset, y: topOffset, width: width, height: height)
+//        return CGRect(x: leftOffset, y: topOffset, width: width, height: height)
     }
     
     
@@ -119,7 +120,7 @@ class QKCutoutView: UIView {
         isSaveImage = true
         DispatchQueue.main.async {
             self.layer.sublayers?.removeAll()
-            self.drawRectangleCutout()
+            self.calculateCutoutRect()
         }
     }
     
